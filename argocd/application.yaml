@@ -20,10 +20,9 @@ spec:
   project: default
 
   source:
-    # TODO: Bu URL'yi kendi GitHub repo URL'inle değiştir
     repoURL: https://github.com/ulasdemir472/mentorify-infra.git
     targetRevision: main
-    path: k8s
+    path: .
     # Kustomize kullanımı
     kustomize: {}
 
