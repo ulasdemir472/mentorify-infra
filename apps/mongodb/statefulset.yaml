@@ -69,10 +69,10 @@ spec:
                 - --eval
                 - "db.adminCommand('ping')"
                 - --quiet
-            initialDelaySeconds: 30
-            periodSeconds: 15
-            timeoutSeconds: 5
-            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 15
+            failureThreshold: 5
           readinessProbe:
             exec:
               command:
@@ -80,10 +80,10 @@ spec:
                 - --eval
                 - "db.adminCommand('ping')"
                 - --quiet
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 15
+            failureThreshold: 5
           volumeMounts:
             - name: mongodb-data
               mountPath: /data/db
