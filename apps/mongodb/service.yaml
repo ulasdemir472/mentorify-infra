@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc
+  namespace: mentorify
+  labels:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/part-of: mentorify
+    app.kubernetes.io/component: database
+spec:
+  # Headless service for StatefulSet — provides stable DNS: mongodb-0.mongodb-svc
+  clusterIP: None
+  selector:
+    app: mongodb
+  ports:
+    - name: mongo
+      port: 27017
+      targetPort: mongo
+      protocol: TCP

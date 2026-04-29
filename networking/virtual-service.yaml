@@ -1,0 +1,59 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: mentorify-vs
+  namespace: mentorify
+  labels:
+    app.kubernetes.io/part-of: mentorify
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - mentorify-gateway
+  http:
+    # Backend API routes — /api/* traffic goes to backend
+    - match:
+        - uri:
+            prefix: /api/
+      route:
+        - destination:
+            host: backend-svc.mentorify.svc.cluster.local
+            port:
+              number: 8800
+      timeout: 30s
+      retries:
+        attempts: 3
+        perTryTimeout: 10s
+        retryOn: 5xx,reset,connect-failure
+
+    # WebSocket route — Socket.IO needs upgrade support
+    - match:
+        - uri:
+            prefix: /socket.io/
+      route:
+        - destination:
+            host: backend-svc.mentorify.svc.cluster.local
+            port:
+              number: 8800
+      timeout: 0s
+
+    # Static uploads served from backend
+    - match:
+        - uri:
+            prefix: /public/uploads/
+      route:
+        - destination:
+            host: backend-svc.mentorify.svc.cluster.local
+            port:
+              number: 8800
+
+    # Everything else goes to frontend
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: frontend-svc.mentorify.svc.cluster.local
+            port:
+              number: 3000
+      timeout: 15s

@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - configmap.yaml
+  - mongodb-init-configmap.yaml
+  # Secret templates — seal these on the server before applying:
+  #   kubeseal --format yaml < backend-secret.yaml > backend-sealed-secret.yaml
+  #   kubeseal --format yaml < mongodb-secret.yaml > mongodb-sealed-secret.yaml
+  # Then uncomment below:
+  # - backend-sealed-secret.yaml
+  # - mongodb-sealed-secret.yaml

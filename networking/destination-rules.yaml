@@ -1,0 +1,47 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: backend-dr
+  namespace: mentorify
+  labels:
+    app.kubernetes.io/part-of: mentorify
+spec:
+  host: backend-svc.mentorify.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      http:
+        h2UpgradePolicy: UPGRADE
+        maxRequestsPerConnection: 100
+      tcp:
+        maxConnections: 50
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: frontend-dr
+  namespace: mentorify
+  labels:
+    app.kubernetes.io/part-of: mentorify
+spec:
+  host: frontend-svc.mentorify.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      http:
+        maxRequestsPerConnection: 200
+      tcp:
+        maxConnections: 50
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
