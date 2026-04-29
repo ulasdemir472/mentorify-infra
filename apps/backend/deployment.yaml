@@ -31,7 +31,6 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       securityContext:
-        runAsNonRoot: true
         fsGroup: 1000
       containers:
         - name: backend
