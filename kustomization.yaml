@@ -16,5 +16,4 @@ resources:
   # Networking (Istio + NetworkPolicy)
   - networking/
 
-commonLabels:
-  app.kubernetes.io/managed-by: kustomize
+
