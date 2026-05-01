@@ -16,15 +16,20 @@ data:
       "liveNow": false,
       "panels": [
         {
+          "title": "TOP 5 CPU Consumers (Entire Cluster)",
+          "type": "timeseries",
+          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+          "targets": [
+            {
+              "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{container!='', container!='POD'}[5m])) by (pod, namespace))",
+              "legendFormat": "{{namespace}} / {{pod}}"
+            }
+          ]
+        },
+        {
           "title": "Mentorify - CPU Usage (Cores)",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
-          "fieldConfig": {
-            "defaults": {
-              "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 10 },
-              "unit": "none"
-            }
-          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
           "targets": [
             {
               "expr": "sum(rate(container_cpu_usage_seconds_total{namespace='mentorify', container!='', container!='POD'}[5m])) by (pod)",
@@ -35,32 +40,11 @@ data:
         {
           "title": "Mentorify - Memory Usage",
           "type": "timeseries",
-          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
-          "fieldConfig": {
-            "defaults": {
-              "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 10 },
-              "unit": "decbytes"
-            }
-          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+          "fieldConfig": { "defaults": { "unit": "decbytes" } },
           "targets": [
             {
               "expr": "sum(container_memory_working_set_bytes{namespace='mentorify', container!='', container!='POD'}) by (pod)",
-              "legendFormat": "{{pod}}"
-            }
-          ]
-        },
-        {
-          "title": "Network Traffic (Receive)",
-          "type": "timeseries",
-          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "binbps"
-            }
-          },
-          "targets": [
-            {
-              "expr": "sum(rate(container_network_receive_bytes_total{namespace='mentorify'}[5m])) by (pod)",
               "legendFormat": "{{pod}}"
             }
           ]
