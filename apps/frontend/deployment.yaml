@@ -36,7 +36,6 @@ spec:
         - name: frontend
           image: ulasdemir472/mentorify-frontend:v1.0.2
           imagePullPolicy: IfNotPresent
-          command: ["sh", "-c", "rm -f .env && node server.js"]
           ports:
             - name: http
 
