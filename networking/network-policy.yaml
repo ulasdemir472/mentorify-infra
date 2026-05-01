@@ -10,14 +10,14 @@ spec:
     - Ingress
 
 ---
-# 2. Traefik'ten (veya Cloudflare Tunnel'dan) gelen trafiğe izin ver
+# 2. Traefik'ten (Dışarıdan) gelen trafiğe izin ver
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-traefik-ingress
   namespace: mentorify
 spec:
-  podSelector: {} # Tüm podlara (Frontend ve Backend) Traefik ulaşabilsin
+  podSelector: {}
   policyTypes:
     - Ingress
   ingress:
@@ -27,7 +27,29 @@ spec:
               kubernetes.io/metadata.name: kube-system
 
 ---
-# 3. Backend'in MongoDB'ye erişimine izin ver
+# 3. Frontend -> Backend (İçeriden) iletişime izin ver
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: mentorify
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend
+      ports:
+        - protocol: TCP
+          port: 8800
+
+---
+# 4. Backend'in MongoDB'ye erişimine izin ver
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
