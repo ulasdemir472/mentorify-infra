@@ -6,24 +6,41 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: 58.2.2
-    chart: kube-prometheus-stack
+    repoURL: https://victoriametrics.github.io/helm-charts/
+    targetRevision: 0.24.1
+    chart: victoria-metrics-k8s-stack
     helm:
       values: |
+        # VictoriaMetrics Single node (Cluster modu kapalı, az kaynak harcar)
+        vmsingle:
+          enabled: true
+          spec:
+            retentionPeriod: "14d"
+            storage:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: local-path
+              resources:
+                requests:
+                  storage: 10Gi
+        
+        # Diğer ağır bileşenleri kapatıyoruz
+        vmalert:
+          enabled: false
+        vmagent:
+          enabled: true # Metrikleri toplamak için lazım
+        
+        # Grafana ayarları
         grafana:
+          enabled: true
+          adminPassword: admin
           ingress:
-            enabled: false # Daha sonra Ingress ekleyeceğiz
-        prometheus:
-          prometheusSpec:
-            storageSpec:
-              volumeClaimTemplate:
-                spec:
-                  storageClassName: local-path
-                  accessModes: ["ReadWriteOnce"]
-                  resources:
-                    requests:
-                      storage: 10Gi
+            enabled: false # Makinedeki Ingress'i kullanacağız
+        
+        # Node exporter ve Kube-state-metrics (CPU/RAM görmemiz için lazım)
+        prometheus-node-exporter:
+          enabled: true
+        kube-state-metrics:
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -34,10 +51,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-      - Replace=true
-  ignoreDifferences:
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      jsonPointers:
-        - /metadata/annotations/controller-gen.kubebuilder.io~1version
-        - /status
