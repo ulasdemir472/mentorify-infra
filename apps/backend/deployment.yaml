@@ -50,8 +50,8 @@ spec:
               cpu: 100m
               memory: 128Mi
             limits:
-              cpu: 300m
-              memory: 384Mi
+              cpu: 500m
+              memory: 512Mi
           startupProbe:
             httpGet:
               path: /api/v1/health
