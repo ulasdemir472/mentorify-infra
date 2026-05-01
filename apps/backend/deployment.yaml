@@ -86,6 +86,7 @@ spec:
               mountPath: /tmp
       volumes:
         - name: uploads
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: backend-uploads-pvc
         - name: tmp
           emptyDir: {}
