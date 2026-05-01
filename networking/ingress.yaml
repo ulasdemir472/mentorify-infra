@@ -7,9 +7,9 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   rules:
-    - host: mentorify.89.252.153.121.nip.io
-      http:
-        paths:
+    # Ana IP adresi (Host header olmadan erişim için deneme)
+    - http:
+        paths: &paths
           - path: /api
             pathType: Prefix
             backend:
@@ -24,20 +24,7 @@ spec:
                 name: frontend-svc
                 port:
                   number: 3000
-    - host: mentorify.local
+    # sslip.io alternatifi
+    - host: mentorify.89.252.153.121.sslip.io
       http:
-        paths:
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: backend-svc
-                port:
-                  number: 8800
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend-svc
-                port:
-                  number: 3000
+        paths: *paths
