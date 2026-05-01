@@ -58,11 +58,11 @@ spec:
                   key: MONGO_APP_PASSWORD
           resources:
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: "100m"
+              memory: "256Mi"
             limits:
-              cpu: 500m
-              memory: 512Mi
+              cpu: "500m"
+              memory: "512Mi"
           livenessProbe:
             exec:
               command:
