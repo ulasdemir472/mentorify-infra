@@ -50,7 +50,7 @@ spec:
         }
       ],
       "refresh": "10s",
-      "schemaVersion: 36,
+      "schemaVersion": 36,
       "style": "dark",
       "tags": ["mentorify"],
       "templating": { "list": [] },
