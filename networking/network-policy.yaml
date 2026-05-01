@@ -1,4 +1,4 @@
-# Default deny all ingress — zero-trust baseline
+# 1. Her şeyi yasakla (Default Deny)
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -10,59 +10,24 @@ spec:
     - Ingress
 
 ---
-# Allow Istio Gateway → Frontend
+# 2. Traefik'ten (veya Cloudflare Tunnel'dan) gelen trafiğe izin ver
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-gateway-to-frontend
+  name: allow-traefik-ingress
   namespace: mentorify
 spec:
-  podSelector:
-    matchLabels:
-      app: frontend
+  podSelector: {} # Tüm podlara (Frontend ve Backend) Traefik ulaşabilsin
   policyTypes:
     - Ingress
   ingress:
     - from:
         - namespaceSelector:
             matchLabels:
-              kubernetes.io/metadata.name: istio-system
-      ports:
-        - protocol: TCP
-          port: 3000
+              kubernetes.io/metadata.name: kube-system
 
 ---
-# Allow Istio Gateway → Backend (API + WebSocket)
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-gateway-to-backend
-  namespace: mentorify
-spec:
-  podSelector:
-    matchLabels:
-      app: backend
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: istio-system
-      ports:
-        - protocol: TCP
-          port: 8800
-    # Allow frontend → backend (SSR API calls)
-    - from:
-        - podSelector:
-            matchLabels:
-              app: frontend
-      ports:
-        - protocol: TCP
-          port: 8800
-
----
-# Allow Backend → MongoDB
+# 3. Backend'in MongoDB'ye erişimine izin ver
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -79,20 +44,6 @@ spec:
         - podSelector:
             matchLabels:
               app: backend
-
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-traefik-ingress
-  namespace: mentorify
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: kube-system
-
+      ports:
+        - protocol: TCP
+          port: 27017
