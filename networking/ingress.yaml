@@ -7,16 +7,34 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   rules:
-    # Ana IP adresi (Host header olmadan erişim için deneme)
-    - http:
-        paths: &paths
-          - path: /api
+    - host: mentorify.89.252.153.121.sslip.io
+      http:
+        paths:
+          # 1. Sadece /api/v1 ile başlayanları Backend'e gönder
+          - path: /api/v1
             pathType: Prefix
             backend:
               service:
                 name: backend-svc
                 port:
                   number: 8800
+          # 2. Resimler/Uploadlar yine Backend'e gitsin
+          - path: /public/uploads
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 8800
+          # 3. WebSocket (Socket.IO) Backend'e gitsin
+          - path: /socket.io
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 8800
+          # 4. Geri kalan her şey (Next.js API'ları /api/auth dahil) Frontend'e gitsin
           - path: /
             pathType: Prefix
             backend:
@@ -24,7 +42,3 @@ spec:
                 name: frontend-svc
                 port:
                   number: 3000
-    # sslip.io alternatifi
-    - host: mentorify.89.252.153.121.sslip.io
-      http:
-        paths: *paths
