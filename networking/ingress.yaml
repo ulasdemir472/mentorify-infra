@@ -3,16 +3,13 @@ kind: Ingress
 metadata:
   name: mentorify-ingress
   namespace: mentorify
-  labels:
-    app.kubernetes.io/part-of: mentorify
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   rules:
     - host: mentorify.89.252.153.121.nip.io
       http:
-        paths: &paths
-          # Backend API
+        paths:
           - path: /api
             pathType: Prefix
             backend:
@@ -20,23 +17,6 @@ spec:
                 name: backend-svc
                 port:
                   number: 8800
-          # WebSocket (Socket.IO)
-          - path: /socket.io
-            pathType: Prefix
-            backend:
-              service:
-                name: backend-svc
-                port:
-                  number: 8800
-          # Static uploads
-          - path: /public/uploads
-            pathType: Prefix
-            backend:
-              service:
-                name: backend-svc
-                port:
-                  number: 8800
-          # Frontend — catch-all (en sona)
           - path: /
             pathType: Prefix
             backend:
@@ -46,8 +26,18 @@ spec:
                   number: 3000
     - host: mentorify.local
       http:
-        paths: *paths
-    - host: mentorify.devlermedya.net
-      http:
-        paths: *paths
-
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 8800
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-svc
+                port:
+                  number: 3000
