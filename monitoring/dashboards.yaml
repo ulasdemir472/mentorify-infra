@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
   labels:
     grafana_dashboard: "1" # Grafana sidecar'ın bunu tanıması için şart
-spec:
+data:
   mentorify-main.json: |-
     {
       "annotations": { "list": [] },
