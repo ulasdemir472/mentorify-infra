@@ -1,6 +1,6 @@
 # Mentorify Infrastructure & GitOps 🚀
 
-This repository contains the **Kubernetes Infrastructure**, **GitOps Workflows**, and **Security Configurations** for the Mentorify platform.
+**Mentorify** is a high-performance mentorship platform designed to connect mentees with industry professionals. This repository manages the entire **Production Infrastructure** using a declarative GitOps approach, ensuring scalability, security, and automated deployments.
 
 ## 🏗️ System Architecture
 
