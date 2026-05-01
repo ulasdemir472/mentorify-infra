@@ -11,7 +11,11 @@ spec:
     chart: victoria-metrics-k8s-stack
     helm:
       values: |
-        # VictoriaMetrics Single node (Cluster modu kapalı, az kaynak harcar)
+        # İsimlerin 63 karakteri aşmaması için kısaltıyoruz
+        fullnameOverride: vmstack
+        nameOverride: vms
+        
+        # VictoriaMetrics Single node
         vmsingle:
           enabled: true
           spec:
@@ -23,24 +27,24 @@ spec:
                 requests:
                   storage: 10Gi
         
-        # Diğer ağır bileşenleri kapatıyoruz
         vmalert:
           enabled: false
         vmagent:
-          enabled: true # Metrikleri toplamak için lazım
+          enabled: true
         
-        # Grafana ayarları
         grafana:
           enabled: true
           adminPassword: admin
+          fullnameOverride: grafana # Grafana ismini de kısaltalım
           ingress:
-            enabled: false # Makinedeki Ingress'i kullanacağız
+            enabled: false
         
-        # Node exporter ve Kube-state-metrics (CPU/RAM görmemiz için lazım)
         prometheus-node-exporter:
           enabled: true
+          fullnameOverride: node-exporter
         kube-state-metrics:
           enabled: true
+          fullnameOverride: ksm
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
