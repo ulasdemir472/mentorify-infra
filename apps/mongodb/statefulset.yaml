@@ -97,8 +97,11 @@ spec:
             name: mongodb-init-script
             defaultMode: 0755
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: mongodb-data
+
         labels:
           app.kubernetes.io/name: mongodb
           app.kubernetes.io/part-of: mentorify
