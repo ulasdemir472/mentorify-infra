@@ -77,4 +77,4 @@ graph TD
 *   **Service Mesh:** Istio (Optional/Partial)
 
 ---
-*Built with ❤️ by [Your Name]*
+*Built with ❤️ by Ulaş Demir*
