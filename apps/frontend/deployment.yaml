@@ -34,7 +34,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: frontend
-          image: ulasdemir472/mentorify-frontend:v1.0.3
+          image: ulasdemir472/mentorify-frontend:v1.0.4
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
