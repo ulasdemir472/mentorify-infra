@@ -7,9 +7,11 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   rules:
-    # 1. Direkt IP üzerinden erişim için (Host header gerektirmeyen kural)
-    - http:
+    # 1. Cloudflare üzerinden gelecek olan ana domain
+    - host: mentorify.devlermedya.net
+      http:
         paths: &paths
+          # Sadece /api/v1 Backend'e gider
           - path: /api/v1
             pathType: Prefix
             backend:
@@ -31,6 +33,7 @@ spec:
                 name: backend-svc
                 port:
                   number: 8800
+          # Diğer her şey (Next.js API'ları dahil) Frontend'e gider
           - path: /
             pathType: Prefix
             backend:
@@ -38,7 +41,9 @@ spec:
                 name: frontend-svc
                 port:
                   number: 3000
-    # 2. sslip.io üzerinden erişim
+    # 2. Alternatif olarak sslip.io ve IP (Yine aynı kurallar geçerli)
     - host: mentorify.89.252.153.121.sslip.io
       http:
+        paths: *paths
+    - http:
         paths: *paths
