@@ -7,3 +7,4 @@ resources:
   - virtual-service.yaml
   - destination-rules.yaml
   - network-policy.yaml
+  - service-monitors.yaml

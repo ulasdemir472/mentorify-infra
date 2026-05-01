@@ -16,4 +16,7 @@ resources:
   # Networking (Istio + NetworkPolicy)
   - networking/
 
+  # Monitoring
+  - monitoring/
+
 

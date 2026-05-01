@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mentorify-apps
+  namespace: mentorify
+  labels:
+    release: monitoring-stack # Prometheus stack'in bunu bulması için kritik label
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: mentorify
+  endpoints:
+    - port: http
+      path: /metrics # Eğer ilerde eklersen buradan okuyacak
+      interval: 30s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mentorify-mongodb
+  namespace: mentorify
+  labels:
+    release: monitoring-stack
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  endpoints:
+    - port: mongodb
+      interval: 30s
