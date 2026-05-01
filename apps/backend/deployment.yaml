@@ -34,7 +34,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: backend
-          image: ulasdemir472/mentorify-backend:v0.0.1
+          image: ulasdemir472/mentorify-backend:v0.0.2
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
