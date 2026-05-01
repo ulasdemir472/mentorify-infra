@@ -6,16 +6,15 @@ metadata:
   labels:
     app.kubernetes.io/part-of: mentorify
 data:
-  # Backend non-sensitive config
   NODE_ENV: "production"
   PORT: "8800"
   API_URL: "/api/v1"
-  FRONT_HOST: "http://89.252.153.121"
+  FRONT_HOST: "https://mentorify.devlermedya.net"
   IYZICO_BASE_URL: "https://sandbox-api.iyzipay.com"
 
   # Internal service URLs (k8s DNS)
   FRONTEND_URL: "http://frontend-svc.mentorify.svc.cluster.local:3000"
   BACKEND_URL: "http://backend-svc.mentorify.svc.cluster.local:8800"
 
-  # Frontend config
-  SECRET_API: "http://backend-svc.mentorify.svc.cluster.local:8800"
+  # Frontend'in hem içeriden hem dışarıdan kullanacağı adres
+  SECRET_API: "https://mentorify.devlermedya.net"
