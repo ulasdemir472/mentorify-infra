@@ -4,14 +4,14 @@ metadata:
   name: mentorify-dashboard
   namespace: monitoring
   labels:
-    grafana_dashboard: "1" # Grafana sidecar'ın bunu tanıması için şart
+    grafana_dashboard: "1"
 data:
   mentorify-main.json: |-
     {
       "annotations": { "list": [] },
       "editable": true,
       "fiscalYearStartMonth": 0,
-      "graphTooltip": 0,
+      "graphTooltip": 1,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -19,32 +19,49 @@ data:
           "title": "Mentorify - CPU Usage (Cores)",
           "type": "timeseries",
           "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+          "fieldConfig": {
+            "defaults": {
+              "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 10 },
+              "unit": "none"
+            }
+          },
           "targets": [
             {
-              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{namespace='mentorify'}) by (pod)",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace='mentorify', container!='', container!='POD'}[5m])) by (pod)",
               "legendFormat": "{{pod}}"
             }
           ]
         },
         {
-          "title": "Mentorify - Memory Usage (Bytes)",
+          "title": "Mentorify - Memory Usage",
           "type": "timeseries",
           "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+          "fieldConfig": {
+            "defaults": {
+              "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 10 },
+              "unit": "decbytes"
+            }
+          },
           "targets": [
             {
-              "expr": "sum(container_memory_working_set_bytes{namespace='mentorify',container!='POD',container!=''}) by (pod)",
+              "expr": "sum(container_memory_working_set_bytes{namespace='mentorify', container!='', container!='POD'}) by (pod)",
               "legendFormat": "{{pod}}"
             }
           ]
         },
         {
-          "title": "Backend - Request Rate (Internal)",
+          "title": "Network Traffic (Receive)",
           "type": "timeseries",
           "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "binbps"
+            }
+          },
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_packets_total{namespace='mentorify', pod=~'backend.*'}[5m]))",
-              "legendFormat": "Packets Recv"
+              "expr": "sum(rate(container_network_receive_bytes_total{namespace='mentorify'}[5m])) by (pod)",
+              "legendFormat": "{{pod}}"
             }
           ]
         }
