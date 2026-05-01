@@ -11,7 +11,7 @@ spec:
   rules:
     - host: mentorify.89.252.153.121.nip.io
       http:
-        paths:
+        paths: &paths
           # Backend API
           - path: /api
             pathType: Prefix
@@ -44,3 +44,10 @@ spec:
                 name: frontend-svc
                 port:
                   number: 3000
+    - host: mentorify.local
+      http:
+        paths: *paths
+    - host: mentorify.devlermedya.net
+      http:
+        paths: *paths
+
